@@ -9,10 +9,11 @@ app = FastAPI(
     description="Hyperlocal Air-Quality & Vehicle-Emission Intelligence Platform"
 )
 
-# CORS middleware for local and production frontend clients
+# CORS middleware for local development and production Vercel frontend clients
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origin_regex=settings.ALLOW_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

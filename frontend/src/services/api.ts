@@ -1,13 +1,15 @@
 import type { Hotspot, ForecastData, AuthorityAlert, BRICSCity, VehicleAnalysisResult, CitizenReport } from '../types';
 import { MOCK_HOTSPOTS, MOCK_FORECAST, MOCK_ALERTS, MOCK_BRICS_CITIES, MOCK_CITIZEN_REPORTS } from '../data/mockData';
 
-const BASE_URL = '/api';
+// Normalized base API URL from Vite environment variable
+const rawUrl = (import.meta.env.VITE_API_URL || '').trim();
+const API_URL = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
 
 export const apiService = {
   // Fetch Hotspots
   async getHotspots(city: string = 'Hyderabad'): Promise<Hotspot[]> {
     try {
-      const res = await fetch(`${BASE_URL}/hotspots?city=${encodeURIComponent(city)}`);
+      const res = await fetch(`${API_URL}/api/hotspots?city=${encodeURIComponent(city)}`);
       if (!res.ok) throw new Error('Network response was not ok');
       const json = await res.json();
       return json.data || MOCK_HOTSPOTS;
@@ -35,7 +37,7 @@ export const apiService = {
         temperature: temperature.toString(),
         heavy_vehicle_ratio: heavyVehicleRatio.toString()
       });
-      const res = await fetch(`${BASE_URL}/forecast?${params.toString()}`);
+      const res = await fetch(`${API_URL}/api/forecast?${params.toString()}`);
       if (!res.ok) throw new Error('Network response was not ok');
       const json = await res.json();
       return json.data || MOCK_FORECAST;
@@ -48,7 +50,7 @@ export const apiService = {
   // Fetch Authority Alerts
   async getAlerts(city: string = 'Hyderabad'): Promise<AuthorityAlert[]> {
     try {
-      const res = await fetch(`${BASE_URL}/alerts?city=${encodeURIComponent(city)}`);
+      const res = await fetch(`${API_URL}/api/alerts?city=${encodeURIComponent(city)}`);
       if (!res.ok) throw new Error('Network response was not ok');
       const json = await res.json();
       return json.data || MOCK_ALERTS;
@@ -61,7 +63,7 @@ export const apiService = {
   // Fetch BRICS Network
   async getBricsNetwork(): Promise<BRICSCity[]> {
     try {
-      const res = await fetch(`${BASE_URL}/brics`);
+      const res = await fetch(`${API_URL}/api/brics`);
       if (!res.ok) throw new Error('Network response was not ok');
       const json = await res.json();
       return json.data || MOCK_BRICS_CITIES;
@@ -74,7 +76,7 @@ export const apiService = {
   // Fetch Citizen Reports
   async getCitizenReports(): Promise<CitizenReport[]> {
     try {
-      const res = await fetch(`${BASE_URL}/citizen-report`);
+      const res = await fetch(`${API_URL}/api/citizen-report`);
       if (!res.ok) throw new Error('Network response was not ok');
       const json = await res.json();
       return json.data || MOCK_CITIZEN_REPORTS;
@@ -87,7 +89,7 @@ export const apiService = {
   // Submit Citizen Report
   async submitCitizenReport(report: Omit<CitizenReport, 'id' | 'timestamp' | 'status'>): Promise<CitizenReport> {
     try {
-      const res = await fetch(`${BASE_URL}/citizen-report`, {
+      const res = await fetch(`${API_URL}/api/citizen-report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(report)
@@ -111,7 +113,7 @@ export const apiService = {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch(`${BASE_URL}/vehicle/analyze`, {
+      const res = await fetch(`${API_URL}/api/vehicle/analyze`, {
         method: 'POST',
         body: formData
       });
@@ -169,7 +171,7 @@ export const apiService = {
     source_language: string;
   }> {
     try {
-      const res = await fetch(`${BASE_URL}/citizen-report/translate`, {
+      const res = await fetch(`${API_URL}/api/citizen-report/translate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, language })
