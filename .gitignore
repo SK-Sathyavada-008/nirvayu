@@ -1,0 +1,12 @@
+# Environments & Keys
+.env
+.env.local
+*.env
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+dist/
+build/
+.vscode/
+.idea/
