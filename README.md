@@ -1,4 +1,4 @@
-# NIRVĀYU 
+# NIRVAYU
 > **AI-Powered Hyperlocal Emission & Air-Quality Intelligence Platform**
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
